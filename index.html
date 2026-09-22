@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CBT Informatika - PTS Kelas 10 | As-Syifa Boarding School</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbar and animations */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .user-select-none {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased min-h-screen font-sans user-select-none">
+
+  <!-- Floating Alert Banner for Fullscreen Lost -->
+  <div id="fullscreen-banner" class="hidden fixed top-0 inset-x-0 z-50 bg-rose-600 text-white px-4 py-3 shadow-lg flex items-center justify-between animate-pulse">
+    <div class="flex items-center gap-2 font-semibold text-sm sm:text-base">
+      <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+      </svg>
+      <span>Peringatan: Layar penuh dimatikan atau Anda berpindah jendela! Segera kembali ke layar penuh.</span>
+    </div>
+    <button onclick="requestExamFullscreen()" class="bg-white text-rose-700 px-4 py-1.5 rounded-lg text-sm font-bold shadow hover:bg-rose-50 transition active:scale-95">
+      Kunci Layar Penuh
+    </button>
+  </div>
+
+  <!-- SCREEN 1: LOGIN & WELCOME SCREEN -->
+  <main id="screen-welcome" class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-xl w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+      <!-- Header banner -->
+      <div class="bg-gradient-to-br from-emerald-700 via-teal-700 to-slate-900 text-white p-6 sm:p-8 relative">
+        <div class="flex items-center justify-between gap-2 mb-3">
+          <div class="inline-flex items-center gap-2 bg-emerald-500/30 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-emerald-100 border border-emerald-400/20">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            CBT Portal Ujian
+          </div>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Penilaian Tengah Semester (PTS)</h1>
+        <p class="text-emerald-100 text-sm mt-1">Informatika Kelas X • As-Syifa Boarding School Subang</p>
+      </div>
+
+      <!-- Form & Instructions -->
+      <div class="p-6 sm:p-8 space-y-6">
+        <!-- Info Badges -->
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+            <div class="text-xs text-slate-500 font-medium">Jumlah Soal</div>
+            <div class="text-lg font-bold text-slate-800">40 Butir</div>
+          </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+            <div class="text-xs text-slate-500 font-medium">Waktu</div>
+            <div class="text-lg font-bold text-slate-800">60 Menit</div>
+          </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+            <div class="text-xs text-slate-500 font-medium">Tipe Soal</div>
+            <div class="text-lg font-bold text-slate-800">Pilihan Ganda</div>
+          </div>
+        </div>
+
+        <!-- Student Data Form -->
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5" for="input-nama">Nama Lengkap Murid *</label>
+            <input type="text" id="input-nama" placeholder="Contoh: Muhammad Fatih" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 text-sm font-medium transition" />
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5" for="input-nis">NIS / NISN *</label>
+              <input type="text" id="input-nis" placeholder="Contoh: 23241001" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 text-sm font-medium transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5" for="input-kelas">Kelas *</label>
+              <select id="input-kelas" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-slate-800 text-sm font-medium transition bg-white">
+                <option value="10 ABU">10 ABU</option>
+                <option value="10 ALI">10 ALI</option>
+                <option value="10 UMAR">10 UMAR</option>
+                <option value="10 UTSMAN">10 UTSMAN</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rules Notice -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs sm:text-sm text-amber-900 space-y-2">
+          <div class="flex items-center gap-2 font-bold text-amber-950">
+            <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Aturan & Mode Keamanan Ujian:
+          </div>
+          <ul class="list-disc list-inside space-y-1 text-amber-800/90 pl-1">
+            <li>Ujian akan secara otomatis <strong>mengunci ke mode Full Screen (Layar Penuh)</strong>.</li>
+            <li>Batas pelanggaran maksimal adalah <strong>3 kali</strong> (keluar fullscreen, berpindah jendela, atau ganti tab).</li>
+            <li class="text-rose-700 font-semibold">Jika mencapai 3 kali pelanggaran, sistem otomatis <strong>LOGOUT & MEMBATALKAN UJIAN</strong> tanpa menyimpan lembar jawaban.</li>
+            <li>Hasil nilai dan analisis ketercapaian materi akan langsung muncul setelah Anda menyelesaikan ujian dengan tertib.</li>
+          </ul>
+        </div>
+
+        <div id="login-error-msg" class="hidden text-rose-600 text-xs font-semibold bg-rose-50 border border-rose-200 p-3 rounded-xl flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span id="login-error-text">Harap lengkapi nama dan NIS/NISN sebelum memulai ujian.</span>
+        </div>
+
+        <button onclick="startExam()" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-base shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition transform active:scale-98">
+          <span>Kunci Layar & Mulai Ujian</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- SCREEN 2: ACTIVE EXAM SCREEN -->
+  <div id="screen-exam" class="hidden min-h-screen flex flex-col">
+    <!-- Top Fixed CBT Navigation Bar -->
+    <header class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <!-- Left: School & Subject Info -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-lg shadow-sm">
+            TIK
+          </div>
+          <div class="hidden sm:block">
+            <h2 class="text-sm font-bold text-slate-800 leading-tight">PTS Informatika Kelas 10</h2>
+            <p class="text-xs text-slate-500 font-medium">As-Syifa Boarding School Subang</p>
+          </div>
+        </div>
+
+        <!-- Center: Countdown Timer -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-xl font-mono font-bold text-slate-800 text-sm sm:text-base">
+            <svg class="w-4 h-4 text-emerald-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke-width="2"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"/>
+            </svg>
+            <span id="timer-display">60:00</span>
+          </div>
+
+          <!-- Violation Badge -->
+          <div id="violation-badge" class="hidden sm:flex items-center gap-1.5 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-xl text-xs font-semibold text-rose-700" title="Batas maksimal 3 kali pelanggaran">
+            <svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span>Pelanggaran: <strong id="violation-count">0</strong> / 3</span>
+          </div>
+        </div>
+
+        <!-- Right: Candidate Info & End Exam Button -->
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden md:block">
+            <div id="header-student-name" class="text-xs font-bold text-slate-800 truncate max-w-[150px]">Nama Siswa</div>
+            <div id="header-student-class" class="text-[11px] text-slate-500 font-medium">10 ABU</div>
+          </div>
+          <!-- Fullscreen Lock Toggle / Status -->
+          <button onclick="requestExamFullscreen()" title="Pastikan layar penuh" class="p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+          </button>
+          <button onclick="confirmFinishExam()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow transition active:scale-95 flex items-center gap-1.5">
+            <span>Selesai</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Linear Progress Bar -->
+      <div class="w-full bg-slate-100 h-1.5">
+        <div id="exam-progress-bar" class="bg-emerald-500 h-1.5 transition-all duration-300 w-0"></div>
+      </div>
+    </header>
+
+    <!-- Main Exam Body Grid -->
+    <div class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Left / Center: Question Panel (8 cols) -->
+      <div class="lg:col-span-8 flex flex-col space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7 flex-1 flex flex-col">
+          <!-- Question Header Meta -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-lg uppercase tracking-wide">
+                Soal Nomor <span id="current-q-number" class="text-sm font-extrabold">1</span>
+              </span>
+              <span class="text-xs text-slate-400 font-medium">dari 40 Soal</span>
+            </div>
+            <!-- Doubt / Ragu Checkbox -->
+            <label class="flex items-center gap-2 cursor-pointer select-none px-3 py-1.5 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 transition text-amber-800 text-xs font-bold">
+              <input type="checkbox" id="btn-doubt" onchange="toggleDoubt()" class="rounded text-amber-500 focus:ring-amber-400 h-4 w-4">
+              <span>Tandai Ragu-ragu</span>
+            </label>
+          </div>
+
+          <!-- Question Text and Markdown/Table Rendering -->
+          <div id="question-content" class="text-slate-800 text-base sm:text-lg leading-relaxed font-medium mb-6 space-y-4">
+            <!-- Injected via JS -->
+          </div>
+
+          <!-- Options List (A, B, C, D, E) -->
+          <div id="options-container" class="space-y-3 mt-auto">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- Navigation Buttons Bottom Row -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex items-center justify-between">
+          <button id="btn-prev" onclick="navigateQuestion(-1)" class="px-5 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm flex items-center gap-2 transition disabled:opacity-40 disabled:cursor-not-allowed">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            <span>Sebelumnya</span>
+          </button>
+
+          <div class="text-xs font-semibold text-slate-500">
+            Terjawab: <span id="answered-count-bottom" class="text-emerald-600 font-bold">0</span> / 40
+          </div>
+
+          <button id="btn-next" onclick="navigateQuestion(1)" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
+            <span>Berikutnya</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Number Grid Sidebar (4 cols) -->
+      <aside class="lg:col-span-4 space-y-4">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sticky top-20">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+              Navigasi Butir Soal
+            </h3>
+            <span class="text-xs font-semibold text-slate-500">Total 40 Soal</span>
+          </div>
+
+          <!-- Question Indicator Badges Legend -->
+          <div class="grid grid-cols-3 gap-2 text-[11px] font-semibold text-slate-600 mb-4">
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-md bg-emerald-600 inline-block"></span>
+              <span>Sudah (<strong id="legend-answered">0</strong>)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-md bg-amber-400 inline-block"></span>
+              <span>Ragu (<strong id="legend-doubt">0</strong>)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-md bg-slate-100 border border-slate-300 inline-block"></span>
+              <span>Belum (<strong id="legend-unanswered">40</strong>)</span>
+            </div>
+          </div>
+
+          <!-- Numbers Grid 1 to 40 -->
+          <div id="grid-numbers" class="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-5 gap-2 max-h-[380px] overflow-y-auto pr-1">
+            <!-- 40 buttons injected via JS -->
+          </div>
+
+          <!-- Quick finish button inside sidebar -->
+          <div class="mt-6 pt-4 border-t border-slate-100">
+            <button onclick="confirmFinishExam()" class="w-full py-2.5 rounded-xl border border-emerald-600 text-emerald-700 hover:bg-emerald-50 font-bold text-xs flex items-center justify-center gap-1.5 transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Kumpulkan Lembar Jawaban
+            </button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- SCREEN 3: RESULT & SCORE SUMMARY SCREEN -->
+  <div id="screen-result" class="hidden min-h-screen p-4 sm:p-8 bg-slate-50">
+    <div class="max-w-4xl mx-auto space-y-6">
+      
+      <!-- Score Report Card for Display and Printing -->
+      <div id="print-area" class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden p-6 sm:p-10 space-y-8">
+        
+        <!-- Document Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-6 gap-4">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-2">
+              Hasil Ujian Resmi
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Laporan Penilaian Tengah Semester</h2>
+            <p class="text-sm text-slate-600 mt-1">Mata Pelajaran: <strong>Informatika</strong> • Satuan Pendidikan: <strong>As-Syifa Boarding School Subang</strong></p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs space-y-1 sm:text-right min-w-[200px]">
+            <div>Nama: <strong id="res-student-name" class="text-slate-800 text-sm">--</strong></div>
+            <div>NIS/NISN: <strong id="res-student-nis" class="text-slate-800">--</strong></div>
+            <div>Kelas: <strong id="res-student-class" class="text-slate-800">--</strong></div>
+            <div>Waktu Selesai: <span id="res-finish-time" class="text-slate-500">--</span></div>
+          </div>
+        </div>
+
+        <!-- Big Score Hero Card -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-3xl shadow-md">
+          <div class="text-center md:text-left space-y-1 md:col-span-1">
+            <span class="text-xs uppercase tracking-widest text-emerald-400 font-bold">Skor Nilai Akhir</span>
+            <div class="flex items-baseline justify-center md:justify-start gap-1">
+              <span id="res-final-score" class="text-5xl sm:text-6xl font-black text-white">0</span>
+              <span class="text-xl text-slate-400 font-semibold">/ 100</span>
+            </div>
+            <p id="res-grade-predicate" class="text-sm font-semibold text-emerald-300">Predikat: Baik</p>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-3 gap-3 md:col-span-2 text-center">
+            <div class="bg-white/10 backdrop-blur rounded-2xl p-3.5 border border-white/10">
+              <span class="text-xs text-emerald-300 font-semibold block">Jawaban Benar</span>
+              <span id="res-total-correct" class="text-2xl font-extrabold text-white">0</span>
+              <span class="text-[11px] text-slate-400 block mt-0.5">Soal</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur rounded-2xl p-3.5 border border-white/10">
+              <span class="text-xs text-rose-300 font-semibold block">Jawaban Salah</span>
+              <span id="res-total-wrong" class="text-2xl font-extrabold text-white">0</span>
+              <span class="text-[11px] text-slate-400 block mt-0.5">Soal</span>
+            </div>
+            <div class="bg-white/10 backdrop-blur rounded-2xl p-3.5 border border-white/10">
+              <span class="text-xs text-amber-300 font-semibold block">Tidak Dijawab</span>
+              <span id="res-total-empty" class="text-2xl font-extrabold text-white">0</span>
+              <span class="text-[11px] text-slate-400 block mt-0.5">Soal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Topic Mastery Breakdown -->
+        <div class="space-y-4">
+          <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            Analisis Penguasaan Materi
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+              <div class="text-xs font-bold text-slate-700">Fungsi Spreadsheet (IF & COUNTIF)</div>
+              <div class="flex items-center justify-between text-xs text-slate-500">
+                <span>Ketuntasan:</span>
+                <span id="cat-spreadsheet-pct" class="font-bold text-slate-800">--%</span>
+              </div>
+              <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="cat-spreadsheet-bar" class="bg-emerald-600 h-2 w-0 transition-all"></div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+              <div class="text-xs font-bold text-slate-700">Google Docs & Daftar Isi (Heading)</div>
+              <div class="flex items-center justify-between text-xs text-slate-500">
+                <span>Ketuntasan:</span>
+                <span id="cat-docs-pct" class="font-bold text-slate-800">--%</span>
+              </div>
+              <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="cat-docs-bar" class="bg-emerald-600 h-2 w-0 transition-all"></div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+              <div class="text-xs font-bold text-slate-700">Integrasi Spreadsheet & Dokumen</div>
+              <div class="flex items-center justify-between text-xs text-slate-500">
+                <span>Ketuntasan:</span>
+                <span id="cat-integrasi-pct" class="font-bold text-slate-800">--%</span>
+              </div>
+              <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                <div id="cat-integrasi-bar" class="bg-emerald-600 h-2 w-0 transition-all"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons Bottom Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 no-print bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="text-xs text-slate-500 font-medium">
+          Hasil ujian dapat langsung dicetak atau diunduh ke format Spreadsheet/Excel.
+        </div>
+        <div class="flex items-center flex-wrap gap-2.5">
+          <button onclick="downloadResultCSV()" class="px-4 py-2.5 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs sm:text-sm flex items-center gap-2 transition">
+            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Unduh Rekap CSV / Excel</span>
+          </button>
+          <button onclick="window.print()" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm flex items-center gap-2 transition">
+            <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Cetak Nilai / PDF</span>
+          </button>
+          <button onclick="restartExam()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-sm transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span>Ujian Baru</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: Confirmation to Finish Exam -->
+  <div id="modal-confirm" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-5 animate-scaleUp">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div>
+          <h4 class="font-extrabold text-slate-800 text-base">Konfirmasi Selesai Ujian</h4>
+          <p class="text-xs text-slate-500">Periksa kembali ringkasan jawaban Anda</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs space-y-2">
+        <div class="flex justify-between font-medium">
+          <span class="text-slate-600">Soal Dijawab:</span>
+          <span id="modal-stat-answered" class="font-bold text-emerald-600">0 Soal</span>
+        </div>
+        <div class="flex justify-between font-medium">
+          <span class="text-slate-600">Belum Dijawab:</span>
+          <span id="modal-stat-unanswered" class="font-bold text-rose-600">0 Soal</span>
+        </div>
+        <div class="flex justify-between font-medium">
+          <span class="text-slate-600">Masih Ragu-ragu:</span>
+          <span id="modal-stat-doubt" class="font-bold text-amber-600">0 Soal</span>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-500">
+        Apakah Anda yakin ingin mengakhiri sesi ujian sekarang? Setelah dikumpulkan, skor nilai dan rekap hasil ujian akan langsung ditampilkan.
+      </p>
+
+      <div class="flex items-center justify-end gap-2.5 pt-2">
+        <button onclick="closeModal('modal-confirm')" class="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold text-xs transition">
+          Periksa Lagi
+        </button>
+        <button onclick="submitExamNow()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition">
+          Ya, Kumpulkan Jawaban
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Violation Warning Popup -->
+  <div id="modal-warning" class="hidden fixed inset-0 z-50 bg-rose-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-rose-200 space-y-4 text-center">
+      <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h4 class="font-extrabold text-slate-900 text-lg">Peringatan Integritas Ujian!</h4>
+      <p id="modal-warning-text" class="text-xs text-slate-600 leading-relaxed">
+        Sistem mendeteksi Anda keluar dari layar penuh atau berpindah ke aplikasi/tab lain. Seluruh aktivitas terekam dalam log pengawas ujian.
+      </p>
+      <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs font-semibold text-rose-800">
+        Pelanggaran: <span id="modal-warning-count" class="font-extrabold text-rose-600 text-sm">1</span> dari <strong class="text-rose-950">3 (Maksimal)</strong>
+        <p class="text-[11px] text-rose-600 mt-1">Jika mencapai 3 kali pelanggaran, Anda akan dikeluarkan otomatis dan jawaban tidak disimpan.</p>
+      </div>
+      <button onclick="dismissWarningAndFullscreen()" class="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md transition">
+        Saya Mengerti & Kembali ke Ujian
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Disqualification Notification -->
+  <div id="modal-disqualified" class="hidden fixed inset-0 z-50 bg-rose-950/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-rose-300 space-y-4 text-center">
+      <div class="w-14 h-14 rounded-full bg-rose-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-rose-600/30 animate-bounce">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+        </svg>
+      </div>
+      <h4 class="font-extrabold text-rose-700 text-xl">Ujian Dibatalkan / Diskualifikasi!</h4>
+      <p class="text-xs text-slate-700 leading-relaxed">
+        Anda telah melakukan pelanggaran batas toleransi (<strong>3 kali pelanggaran keamanan</strong>). Sesuai regulasi CBT As-Syifa, sesi ujian Anda dihentikan secara otomatis dan <strong>seluruh data jawaban dihapus</strong> tanpa disimpan ke sistem.
+      </p>
+      <div class="p-3 bg-slate-100 rounded-xl text-xs text-slate-600 border border-slate-200">
+        Silakan lapor kepada guru pengawas ujian untuk konfirmasi status ujian Anda.
+      </div>
+      <button onclick="confirmDisqualificationLogout()" class="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md transition">
+        Keluar ke Halaman Awal
+      </button>
+    </div>
+  </div>
+
+  <script>
+    /* Complete Question Database (40 Questions with Official Answer Key) */
+    const EXAM_QUESTIONS = [
+      {
+        id: 1,
+        category: "spreadsheet",
+        question: "Pengurus kamar di As-Syifa Boarding School ingin membuat rekap kebersihan kamar setiap hari. Data yang dicatat meliputi nama kamar, jumlah penghuni, skor kebersihan, dan status kebersihan. Mereka ingin agar status \"LULUS\" muncul otomatis jika skor minimal 80 dan \"PERLU PERBAIKAN\" jika skor di bawah 80.\n\nFungsi Spreadsheet yang paling tepat digunakan untuk menghasilkan status tersebut adalah ....",
+        options: {
+          A: "COUNTIF",
+          B: "SUM",
+          C: "IF",
+          D: "AVERAGE",
+          E: "COUNTA"
+        },
+        correct: "C",
+        explanation: "Fungsi IF digunakan untuk membuat keputusan logika berdasarkan kondisi tertentu (jika skor >= 80 maka LULUS, jika tidak maka PERLU PERBAIKAN)."
+      },
+      {
+        id: 2,
+        category: "spreadsheet",
+        question: "Seorang murid As-Syifa membuat tabel nilai dengan ketentuan:\n• Nilai ≥ 85 = \"Sangat Baik\"\n• Nilai 70–84 = \"Baik\"\n• Nilai < 70 = \"Perlu Bimbingan\"\n\nJika nilai berada pada sel B2, rumus yang paling tepat untuk menentukan kategori tersebut adalah ....",
+        options: {
+          A: "=IF(B2>=85,\"Sangat Baik\",IF(B2>=70,\"Baik\",\"Perlu Bimbingan\"))",
+          B: "=IF(B2>85,\"Sangat Baik\",IF(B2>70,\"Baik\",\"Perlu Bimbingan\"))",
+          C: "=IF(B2>=70,\"Baik\",IF(B2>=85,\"Sangat Baik\",\"Perlu Bimbingan\"))",
+          D: "=COUNTIF(B2,\">=85\")",
+          E: "=IF(B2>=85,\"Sangat Baik\",\"Baik\",\"Perlu Bimbingan\")"
+        },
+        correct: "A",
+        explanation: "Rumus nested IF bertingkat yang benar mengevaluasi kondisi tertinggi terlebih dahulu (B2>=85), lalu jika salah mengevaluasi kondisi berikutnya (B2>=70), dan sisanya adalah 'Perlu Bimbingan'."
+      },
+      {
+        id: 3,
+        category: "spreadsheet",
+        question: "Panitia kegiatan sekolah membuat data kehadiran murid dalam Spreadsheet. Mereka ingin mengetahui berapa banyak murid yang memiliki status \"Hadir\" pada kolom D.\n\nJika data berada pada rentang D2:D101, rumus yang paling sesuai adalah ....",
+        options: {
+          A: "=COUNT(D2:D101,\"Hadir\")",
+          B: "=COUNTIF(D2:D101,\"Hadir\")",
+          C: "=IF(D2:D101=\"Hadir\")",
+          D: "=SUMIF(D2:D101,\"Hadir\")",
+          E: "=COUNTA(D2:D101,\"Hadir\")"
+        },
+        correct: "B",
+        explanation: "Fungsi COUNTIF digunakan untuk menghitung jumlah sel dalam rentang yang memenuhi satu kriteria tertentu (dalam kasus ini kriteria teks \"Hadir\")."
+      },
+      {
+        id: 4,
+        category: "spreadsheet",
+        question: "Tim panitia As-Syifa mencatat pilihan ekstrakurikuler murid. Hasilnya menunjukkan terdapat 35 murid memilih English Club, 28 memilih Arabic Club, dan 42 memilih KBS.\n\nJika ingin menghitung jumlah murid yang memilih English Club, fungsi yang paling tepat adalah ....",
+        options: {
+          A: "SUM",
+          B: "IF",
+          C: "AVERAGE",
+          D: "COUNTIF",
+          E: "MAX"
+        },
+        correct: "D",
+        explanation: "COUNTIF adalah fungsi yang menghitung banyaknya data berdasarkan kriteria spesifik, yaitu pilihan 'English Club'."
+      },
+      {
+        id: 5,
+        category: "spreadsheet",
+        question: "Seorang murid membuat daftar nilai ujian pada Spreadsheet. Ia menggunakan rumus:\n=IF(C2>=75,\"Lulus\",\"Tidak Lulus\")\n\nJika nilai pada C2 adalah 75, hasil yang muncul adalah ....",
+        options: {
+          A: "Tidak Lulus",
+          B: "Kosong",
+          C: "Error",
+          D: "75",
+          E: "Lulus"
+        },
+        correct: "E",
+        explanation: "Karena operator yang digunakan adalah >= (lebih besar atau sama dengan), maka nilai 75 memenuhi kondisi dan menghasilkan \"Lulus\"."
+      },
+      {
+        id: 6,
+        category: "spreadsheet",
+        question: "Dalam pendataan peserta lomba di As-Syifa, kolom B berisi kategori peserta. Guru ingin menghitung jumlah peserta kategori \"Putra\".\n\nData berada pada rentang B2:B200. Rumus yang paling tepat adalah ....",
+        options: {
+          A: "=COUNTIF(B2:B200,\"Putra\")",
+          B: "=IF(B2:B200=\"Putra\")",
+          C: "=COUNT(B2:B200,\"Putra\")",
+          D: "=SUM(B2:B200,\"Putra\")",
+          E: "=COUNTA(B2:B200,\"Putra\")"
+        },
+        correct: "A",
+        explanation: "Sintaks COUNTIF yang tepat adalah =COUNTIF(range, criteria), yaitu =COUNTIF(B2:B200,\"Putra\")."
+      },
+      {
+        id: 7,
+        category: "docs",
+        question: "Pengurus OSIS ingin membuat laporan kegiatan menggunakan Google Docs. Dokumen tersebut terdiri atas beberapa bagian seperti Pendahuluan, Pelaksanaan, Hasil Kegiatan, Evaluasi, dan Kesimpulan.\n\nAgar Google Docs dapat membuat daftar isi otomatis yang mudah diperbarui, tindakan yang paling tepat adalah ....",
+        options: {
+          A: "Menulis semua judul menggunakan huruf kapital",
+          B: "Memberi warna berbeda pada setiap judul",
+          C: "Menggunakan Heading pada setiap judul dan subjudul",
+          D: "Menebalkan seluruh paragraf",
+          E: "Memberikan garis bawah pada semua judul"
+        },
+        correct: "C",
+        explanation: "Google Docs mengenali struktur hierarki dokumen untuk membuat Daftar Isi (Table of Contents) otomatis melalui format style Heading (Heading 1, Heading 2, dst)."
+      },
+      {
+        id: 8,
+        category: "docs",
+        question: "Seorang murid sudah membuat dokumen laporan sebanyak 25 halaman. Ia kemudian menambahkan satu bab baru di antara Bab II dan Bab III. Daftar isi yang dibuat sebelumnya menjadi tidak sesuai.\n\nSolusi paling efektif adalah ....",
+        options: {
+          A: "Menghapus seluruh daftar isi dan mengetiknya kembali secara manual",
+          B: "Mengubah ukuran font daftar isi",
+          C: "Menghapus semua judul bab",
+          D: "Memperbarui daftar isi berdasarkan Heading yang sudah digunakan",
+          E: "Menyalin daftar isi ke Spreadsheet"
+        },
+        correct: "D",
+        explanation: "Daftar isi otomatis memiliki tombol 'Update Table of Contents' (Perbarui daftar isi) yang secara instan menyinkronkan perubahan judul dan nomor halaman dari Heading."
+      },
+      {
+        id: 9,
+        category: "integrasi",
+        question: "Panitia As-Syifa ingin membuat sertifikat peserta kegiatan secara lebih efisien. Nama peserta sudah tersedia dalam Spreadsheet, sedangkan format sertifikat dibuat menggunakan Docs.\n\nPendekatan yang paling efektif adalah ....",
+        options: {
+          A: "Mengetik nama peserta satu per satu di Docs",
+          B: "Mengintegrasikan data Spreadsheet dengan dokumen yang menjadi template",
+          C: "Mengubah Docs menjadi Spreadsheet terlebih dahulu",
+          D: "Memasukkan semua data menggunakan screenshot",
+          E: "Membuat satu dokumen berbeda secara manual untuk setiap peserta"
+        },
+        correct: "B",
+        explanation: "Mengintegrasikan data Spreadsheet dengan template dokumen (seperti mail merge / dokumen dinamis) memungkinkan pembuatan sertifikat massal secara otomatis dan cepat."
+      },
+      {
+        id: 10,
+        category: "spreadsheet",
+        question: "Seorang murid memiliki data:\n| Nama | Nilai |\n| Ahmad | 80 |\n| Bilal | 65 |\n| Citra | 90 |\n| Dini | 70 |\n\nIa ingin membuat kolom Status dengan ketentuan nilai ≥ 75 = Lulus.\nJika nilai Ahmad berada di B2, rumus yang tepat adalah ....",
+        options: {
+          A: "=COUNTIF(B2,\">=75\")",
+          B: "=IF(B2>75,\"Lulus\",\"Tidak Lulus\")",
+          C: "=IF(B2>=75,\"Lulus\",\"Tidak Lulus\")",
+          D: "=COUNT(B2>=75)",
+          E: "=IF(B2<=75,\"Lulus\",\"Tidak Lulus\")"
+        },
+        correct: "C",
+        explanation: "Ketentuan nilai minimal 75 (≥ 75) dituliskan dengan operator >=. Rumusnya adalah =IF(B2>=75,\"Lulus\",\"Tidak Lulus\")."
+      },
+      {
+        id: 11,
+        category: "spreadsheet",
+        question: "Pengurus asrama ingin mengetahui jumlah kamar yang memperoleh status \"Perlu Perbaikan\". Status tersebut berada pada rentang E2:E50.\n\nRumus yang paling tepat adalah ....",
+        options: {
+          A: "=COUNTIF(E2:E50,\"Perlu Perbaikan\")",
+          B: "=IF(E2:E50=\"Perlu Perbaikan\")",
+          C: "=COUNT(E2:E50,\"Perlu Perbaikan\")",
+          D: "=SUM(E2:E50,\"Perlu Perbaikan\")",
+          E: "=AVERAGE(E2:E50)"
+        },
+        correct: "A",
+        explanation: "Fungsi COUNTIF menghitung frekuensi kemunculan teks 'Perlu Perbaikan' pada range E2:E50."
+      },
+      {
+        id: 12,
+        category: "integrasi",
+        question: "Guru Informatika meminta murid membuat laporan hasil survei penggunaan teknologi di sekolah. Data awal berada di Spreadsheet, sedangkan laporan akhir dibuat di Docs.\n\nManfaat utama integrasi kedua aplikasi tersebut adalah ....",
+        options: {
+          A: "Semua data harus diketik ulang agar formatnya sama",
+          B: "Spreadsheet hanya digunakan sebagai tempat menyimpan gambar",
+          C: "Docs menggantikan seluruh fungsi Spreadsheet",
+          D: "Data dapat dikelola di Spreadsheet kemudian disajikan dalam dokumen secara lebih terstruktur",
+          E: "Spreadsheet tidak perlu digunakan setelah laporan dibuat"
+        },
+        correct: "D",
+        explanation: "Spreadsheet unggul dalam pengolahan, perhitungan, dan analisis data, sementara Docs unggul dalam penyusunan narasi laporan tertulis yang formal dan terstruktur."
+      },
+      {
+        id: 13,
+        category: "spreadsheet",
+        question: "Sebuah Spreadsheet digunakan untuk menentukan predikat nilai:\n90–100 = A\n80–89 = B\n70–79 = C\n<70 = D\n\nNilai terdapat pada B2. Rumus yang paling tepat adalah ....",
+        options: {
+          A: "=IF(B2>=70,\"C\",IF(B2>=80,\"B\",IF(B2>=90,\"A\",\"D\")))",
+          B: "=IF(B2>=90,\"A\",IF(B2>=80,\"B\",IF(B2>=70,\"C\",\"D\")))",
+          C: "=COUNTIF(B2,\">=90\")",
+          D: "=IF(B2>=90,\"A\",\"B\",\"C\",\"D\")",
+          E: "=IF(B2<70,\"D\",IF(B2<80,\"A\",IF(B2<90,\"B\",\"C\")))"
+        },
+        correct: "B",
+        explanation: "Pengecekan logika berurutan menurun dari nilai terbesar (>=90 lalu >=80 lalu >=70) memastikan setiap kategori tersaring dengan akurat."
+      },
+      {
+        id: 14,
+        category: "spreadsheet",
+        question: "Seorang wali kelas ingin mengetahui jumlah murid yang mendapatkan nilai minimal 80. Nilai berada pada rentang C2:C36.\n\nRumus yang paling sesuai adalah ....",
+        options: {
+          A: "=COUNTIF(C2:C36,\">80\")",
+          B: "=COUNT(C2:C36,\">=80\")",
+          C: "=IF(C2:C36>=80)",
+          D: "=COUNTIF(C2:C36,\">=80\")",
+          E: "=SUMIF(C2:C36,\">=80\")"
+        },
+        correct: "D",
+        explanation: "Kata kunci 'minimal 80' berarti 80 ikut dihitung, sehingga kriterianya adalah \">=80\" menggunakan rumus COUNTIF."
+      },
+      {
+        id: 15,
+        category: "docs",
+        question: "Murid diminta membuat laporan kegiatan \"Assyifa Menjelajah Dunia\". Laporan terdiri atas:\n- Pendahuluan\n- Tujuan Kegiatan\n- Negara Tujuan\n- Hasil Pengamatan\n- Kesimpulan\n\nAgar daftar isi dapat dibuat otomatis, struktur dokumen sebaiknya dibuat dengan ....",
+        options: {
+          A: "Heading 1 untuk judul utama dan Heading 2 untuk subbagian",
+          B: "Bold untuk semua teks",
+          C: "Font 16 untuk semua paragraf",
+          D: "Spasi 2 untuk semua teks",
+          E: "Center alignment untuk semua bagian"
+        },
+        correct: "A",
+        explanation: "Heading 1 digunakan untuk bab/bagian utama, dan Heading 2 untuk subbagian agar hierarki daftar isi tersusun rapi secara otomatis."
+      },
+      {
+        id: 16,
+        category: "integrasi",
+        question: "Seorang murid memasukkan data peserta lomba dari Spreadsheet ke Docs menggunakan copy-paste biasa. Setelah beberapa data diperbarui di Spreadsheet, data yang sudah ditempel di Docs tidak berubah.\n\nHal tersebut terjadi karena ....",
+        options: {
+          A: "Docs tidak dapat menampilkan tabel",
+          B: "Spreadsheet hanya dapat digunakan untuk perhitungan",
+          C: "Data yang ditempel tidak terhubung secara otomatis dengan sumber data",
+          D: "Docs hanya dapat membaca data berupa gambar",
+          E: "Spreadsheet menghapus data setelah disalin"
+        },
+        correct: "C",
+        explanation: "Salin tempel biasa (unlinked) menyalin data statis. Agar otomatis sinkron, harus memilih opsi 'Link to spreadsheet' (Tautkan ke spreadsheet)."
+      },
+      {
+        id: 17,
+        category: "spreadsheet",
+        question: "Dalam data kegiatan mentoring, kolom D berisi status:\nHadir, Hadir, Izin, Hadir, Sakit, Hadir, Izin.\n\nJika guru ingin mengetahui jumlah murid yang Hadir, formula yang tepat adalah ....",
+        options: {
+          A: "=COUNTIF(D2:D8,\"Izin\")",
+          B: "=COUNT(D2:D8)",
+          C: "=IF(D2:D8=\"Hadir\")",
+          D: "=COUNTA(D2:D8)",
+          E: "=COUNTIF(D2:D8,\"Hadir\")"
+        },
+        correct: "E",
+        explanation: "Rumus =COUNTIF(D2:D8,\"Hadir\") secara khusus menghitung sel yang bernilai \"Hadir\"."
+      },
+      {
+        id: 18,
+        category: "docs",
+        question: "Sebuah laporan sekolah memiliki 10 bab dan setiap bab memiliki beberapa subbab. Murid ingin membuat daftar isi yang hanya menampilkan judul bab utama tanpa subbab.\n\nTindakan yang paling tepat adalah ....",
+        options: {
+          A: "Menghapus semua subbab",
+          B: "Menggunakan Heading yang sesuai dan mengatur tingkat tampilan daftar isi",
+          C: "Mengubah semua teks menjadi Bold",
+          D: "Membuat daftar isi menggunakan Spreadsheet",
+          E: "Menulis nomor halaman secara manual"
+        },
+        correct: "B",
+        explanation: "Fitur Table of Contents di Docs memungkinkan pengguna mengatur tingkatan Heading yang ditampilkan (misalnya hanya level 1)."
+      },
+      {
+        id: 19,
+        category: "integrasi",
+        question: "Panitia ingin membuat daftar penerima penghargaan. Data Spreadsheet berisi nama, kelas, prestasi, dan kategori penghargaan. Data tersebut akan digunakan dalam dokumen penghargaan.\n\nMengapa menggunakan Spreadsheet sebagai sumber data lebih efektif daripada mengetik langsung di Docs?",
+        options: {
+          A: "Spreadsheet memiliki lebih banyak jenis font",
+          B: "Docs tidak bisa membuat tabel",
+          C: "Spreadsheet dapat membantu mengelola, menyaring, dan mengolah data secara sistematis",
+          D: "Spreadsheet hanya digunakan untuk membuat dokumen",
+          E: "Docs tidak dapat menyimpan teks"
+        },
+        correct: "C",
+        explanation: "Spreadsheet menyediakan fitur filter, sorting, dan formula untuk memproses data terstruktur sebelum diekspor ke format dokumen."
+      },
+      {
+        id: 20,
+        category: "spreadsheet",
+        question: "Sebuah kelas memiliki 40 murid. Pada kolom E terdapat status pembayaran kegiatan. Guru ingin mengetahui jumlah murid yang statusnya \"Sudah Bayar\".\n\nFormula yang tepat adalah ....",
+        options: {
+          A: "=IF(E2:E41=\"Sudah Bayar\")",
+          B: "=COUNT(E2:E41,\"Sudah Bayar\")",
+          C: "=SUM(E2:E41)",
+          D: "=COUNTIF(E2:E41,\"Sudah Bayar\")",
+          E: "=AVERAGE(E2:E41)"
+        },
+        correct: "D",
+        explanation: "=COUNTIF(E2:E41,\"Sudah Bayar\") menghitung banyaknya murid dengan status pembayaran yang sesuai kriteria."
+      },
+      {
+        id: 21,
+        category: "spreadsheet",
+        question: "Murid membuat rekap nilai dengan rumus:\n=IF(D2>=75,\"Lulus\",\"Remedial\")\n\nKemudian rumus tersebut disalin dari D2 ke D30 menggunakan drag fill. Apa keuntungan utama penggunaan cara tersebut?",
+        options: {
+          A: "Formula dapat menyesuaikan referensi sel untuk setiap baris secara otomatis",
+          B: "Semua nilai akan menjadi sama",
+          C: "Semua hasil akan menjadi \"Lulus\"",
+          D: "Formula hanya bekerja pada D2",
+          E: "Spreadsheet akan menghapus data sebelumnya"
+        },
+        correct: "A",
+        explanation: "Fitur autofill memanfaatkan referensi sel relatif sehingga referensi baris menyesuaikan otomatis (D2 menjadi D3, D4, dst)."
+      },
+      {
+        id: 22,
+        category: "spreadsheet",
+        question: "Pengurus asrama memiliki data kebersihan:\n| Kamar | Skor |\n| A01 | 90 |\n| A02 | 75 |\n| A03 | 60 |\n| A04 | 85 |\n\nKetentuan: skor ≥80 = \"Baik\", sedangkan skor di bawah 80 = \"Perlu Evaluasi\".\nJika skor berada pada B2, formula yang tepat adalah ....",
+        options: {
+          A: "=IF(B2>80,\"Baik\",\"Perlu Evaluasi\")",
+          B: "=IF(B2>=80,\"Baik\",\"Perlu Evaluasi\")",
+          C: "=COUNTIF(B2,\">=80\")",
+          D: "=IF(B2<=80,\"Baik\",\"Perlu Evaluasi\")",
+          E: "=COUNT(B2>=80)"
+        },
+        correct: "B",
+        explanation: "Karena skor minimal 80 bernilai \"Baik\", digunakan tanda >= 80."
+      },
+      {
+        id: 23,
+        category: "docs",
+        question: "Dalam sebuah laporan penelitian murid, judul \"BAB I PENDAHULUAN\" sudah diberi Heading 1. Namun judul \"Latar Belakang\" diberi Bold biasa.\nKetika daftar isi dibuat, \"Latar Belakang\" tidak muncul.\n\nPenyebab paling tepat adalah ....",
+        options: {
+          A: "Google Docs tidak mendukung subjudul",
+          B: "Daftar isi hanya dapat menampilkan teks berwarna hitam",
+          C: "Latar Belakang belum menggunakan style Heading yang dikenali oleh daftar isi",
+          D: "Halaman dokumen terlalu banyak",
+          E: "Ukuran font terlalu kecil"
+        },
+        correct: "C",
+        explanation: "Daftar isi otomatis hanya mendeteksi teks yang diformat dengan Style Heading (Heading 1, 2, 3), bukan sekadar teks tebal (Bold biasa)."
+      },
+      {
+        id: 24,
+        category: "integrasi",
+        question: "Guru meminta murid membuat laporan hasil kegiatan menggunakan data jumlah peserta dari Spreadsheet. Setelah laporan selesai, terdapat perubahan jumlah peserta.\n\nStrategi kerja yang paling baik adalah ....",
+        options: {
+          A: "Menghapus seluruh laporan",
+          B: "Mengetik ulang seluruh dokumen",
+          C: "Membuat laporan baru dari awal",
+          D: "Menggunakan data sumber yang terstruktur dan memperbarui bagian data yang terintegrasi",
+          E: "Mengubah semua data menjadi gambar"
+        },
+        correct: "D",
+        explanation: "Strategi terbaik adalah menjaga struktur data sumber di Spreadsheet dan memperbarui tabel atau diagram yang ditautkan di Docs tanpa perlu mengetik ulang."
+      },
+      {
+        id: 25,
+        category: "spreadsheet",
+        question: "Pada Spreadsheet, kolom C berisi nilai dan kolom D akan berisi status. Guru memberikan aturan:\nJika nilai ≥ 90, tampilkan \"Sangat Baik\". Jika tidak, tampilkan \"Belum Mencapai Target\".\n\nFormula yang benar adalah ....",
+        options: {
+          A: "=COUNTIF(C2,\">=90\")",
+          B: "=IF(C2>90,\"Sangat Baik\",\"Belum Mencapai Target\")",
+          C: "=IF(C2>=90,\"Sangat Baik\",\"Belum Mencapai Target\")",
+          D: "=COUNT(C2>=90)",
+          E: "=IF(C2<=90,\"Sangat Baik\",\"Belum Mencapai Target\")"
+        },
+        correct: "C",
+        explanation: "Formula IF yang tepat adalah =IF(kondisi, nilai_jika_benar, nilai_jika_salah), yaitu =IF(C2>=90,\"Sangat Baik\",\"Belum Mencapai Target\")."
+      },
+      {
+        id: 26,
+        category: "spreadsheet",
+        question: "Panitia PIKATKITA memiliki data prestasi murid dan ingin mengetahui berapa banyak murid yang mengikuti kategori \"Karya Tulis Ilmiah\".\nKolom kategori berada pada F2:F150.\n\nFormula yang tepat adalah ....",
+        options: {
+          A: "=COUNTIF(F2:F150,\"Karya Tulis Ilmiah\")",
+          B: "=IF(F2:F150=\"Karya Tulis Ilmiah\")",
+          C: "=COUNT(F2:F150,\"Karya Tulis Ilmiah\")",
+          D: "=SUM(F2:F150)",
+          E: "=COUNTA(F2:F150,\"Karya Tulis Ilmiah\")"
+        },
+        correct: "A",
+        explanation: "=COUNTIF(F2:F150,\"Karya Tulis Ilmiah\") menghitung data berdasarkan teks kategori lomba."
+      },
+      {
+        id: 27,
+        category: "docs",
+        question: "Seorang murid membuat dokumen laporan sebanyak 30 halaman. Ia ingin pembaca dapat langsung menuju Bab III dengan mengeklik nomor halaman pada daftar isi.\n\nFitur yang paling sesuai digunakan adalah ....",
+        options: {
+          A: "Word Count",
+          B: "Page Setup",
+          C: "Explore",
+          D: "Header",
+          E: "Table of Contents"
+        },
+        correct: "E",
+        explanation: "Fitur Table of Contents (Daftar Isi) di Docs secara otomatis menyertakan pranala (hyperlink) aktif ke setiap bab dan subbab terkait."
+      },
+      {
+        id: 28,
+        category: "integrasi",
+        question: "Dalam proyek \"Assyifa Mendunia\", murid mengumpulkan data negara tujuan dalam Spreadsheet. Mereka kemudian membuat laporan di Docs yang berisi tabel, grafik, dan penjelasan.\n\nPembagian fungsi aplikasi yang paling tepat adalah ....",
+        options: {
+          A: "Docs digunakan untuk semua perhitungan, Spreadsheet hanya untuk mengetik",
+          B: "Spreadsheet digunakan untuk mengolah data, sedangkan Docs digunakan untuk menyusun laporan",
+          C: "Spreadsheet digunakan hanya untuk mencetak laporan",
+          D: "Docs digunakan untuk membuat rumus, Spreadsheet untuk membuat paragraf",
+          E: "Kedua aplikasi harus memiliki data yang berbeda"
+        },
+        correct: "B",
+        explanation: "Spreadsheet berfungsi sebagai mesin pengolah data dan grafik, sementara Google Docs berfungsi menyusun narasi, analisis, dan tata letak laporan komprehensif."
+      },
+      {
+        id: 29,
+        category: "spreadsheet",
+        question: "Sebuah data nilai memiliki 50 murid. Setelah menggunakan COUNTIF dengan kriteria \"Lulus\", hasilnya adalah 42.\n\nInterpretasi yang paling tepat adalah ....",
+        options: {
+          A: "Nilai rata-rata kelas adalah 42",
+          B: "Ada 42 murid yang datanya kosong",
+          C: "Ada 42 murid yang memenuhi kriteria \"Lulus\"",
+          D: "Nilai tertinggi adalah 42",
+          E: "Semua murid memperoleh nilai 42"
+        },
+        correct: "C",
+        explanation: "Fungsi COUNTIF menghasilkan angka 42, artinya terdapat tepat 42 baris sel yang memenuhi kriteria 'Lulus'."
+      },
+      {
+        id: 30,
+        category: "spreadsheet",
+        question: "Seorang murid menggunakan formula:\n=COUNTIF(B2:B20,\"Hadir\")\nTetapi hasilnya 0, padahal secara visual terdapat beberapa data \"Hadir\". Salah satu kemungkinan penyebab adalah ....",
+        options: {
+          A: "COUNTIF tidak dapat menghitung teks",
+          B: "Rumus IF harus digunakan terlebih dahulu",
+          C: "Spreadsheet tidak dapat membaca data pada kolom B",
+          D: "Data sebenarnya memiliki perbedaan teks/spasi sehingga tidak cocok dengan kriteria yang digunakan",
+          E: "COUNTIF hanya dapat digunakan untuk angka"
+        },
+        correct: "D",
+        explanation: "Karakter spasi tak kasat mata (seperti 'Hadir ' atau ' Hadir') menyebabkan perbandingan teks di COUNTIF menghasilkan False sehingga bernilai 0."
+      },
+      {
+        id: 31,
+        category: "docs",
+        question: "Dalam laporan kegiatan sekolah, murid menggunakan Heading 1 untuk setiap bab dan Heading 2 untuk subbab. Ia kemudian menambahkan bab baru.\n\nApa keuntungan struktur tersebut terhadap daftar isi?",
+        options: {
+          A: "Daftar isi dapat diperbarui mengikuti perubahan struktur dokumen",
+          B: "Semua halaman otomatis menjadi satu halaman",
+          C: "Semua paragraf berubah menjadi judul",
+          D: "Nomor halaman tidak diperlukan lagi",
+          E: "Isi dokumen otomatis diterjemahkan"
+        },
+        correct: "A",
+        explanation: "Penggunaan Heading terstruktur memungkinkan Daftar Isi otomatis diperbarui (refresh) menyesuaikan bab baru yang disisipkan."
+      },
+      {
+        id: 32,
+        category: "spreadsheet",
+        question: "Guru meminta murid membuat daftar penerima beasiswa. Data berasal dari Spreadsheet dan terdiri dari nama, kelas, nilai rata-rata, serta status kelayakan.\nMurid menggunakan IF untuk menentukan status kelayakan berdasarkan nilai rata-rata.\n\nAlasan penggunaan IF pada kasus tersebut adalah ....",
+        options: {
+          A: "Menghitung jumlah penerima",
+          B: "Mengurutkan nama murid",
+          C: "Mengubah Spreadsheet menjadi Docs",
+          D: "Menentukan keputusan berdasarkan kondisi tertentu",
+          E: "Membuat nomor halaman"
+        },
+        correct: "D",
+        explanation: "Tujuan pokok dari fungsi logika IF adalah mengambil keputusan (apakah 'Layak' atau 'Tidak Layak') berdasarkan suatu kondisi nilai batas."
+      },
+      {
+        id: 33,
+        category: "spreadsheet",
+        question: "Sebuah laporan kegiatan memiliki data jumlah peserta berdasarkan kelas. Data awal:\nX-A = 25\nX-B = 30\nX-C = 28\nX-D = 32\n\nJika guru ingin menghitung jumlah kelas yang memiliki peserta lebih dari 28, fungsi yang paling tepat adalah ....",
+        options: {
+          A: "=COUNTIF(B2:B5,\">28\")",
+          B: "=COUNTIF(B2:B5,\">=28\")",
+          C: "=IF(B2:B5>28)",
+          D: "=SUM(B2:B5,\">28\")",
+          E: "=COUNT(B2:B5,\">28\")"
+        },
+        correct: "A",
+        explanation: "Kriteria 'lebih dari 28' ditulis dengan operator '>28' pada fungsi COUNTIF."
+      },
+      {
+        id: 34,
+        category: "docs",
+        question: "Murid diminta menyusun laporan kegiatan Tahajud Berjamaah. Guru menginginkan dokumen yang profesional dan mudah dinavigasi.\n\nKombinasi langkah yang paling tepat adalah ....",
+        options: {
+          A: "Mengetik judul secara manual dan nomor halaman secara manual",
+          B: "Menggunakan Bold untuk semua teks dan membuat daftar isi dengan tabel",
+          C: "Menggunakan Heading secara konsisten, kemudian menyisipkan Table of Contents",
+          D: "Mengubah semua halaman menjadi gambar",
+          E: "Menggunakan Spreadsheet untuk menulis seluruh laporan"
+        },
+        correct: "C",
+        explanation: "Standar profesional pembuatan dokumen berstruktur di Docs adalah menerapkan Heading secara konsisten lalu menyisipkan Table of Contents otomatis."
+      },
+      {
+        id: 35,
+        category: "integrasi",
+        question: "Dalam proyek sekolah, data peserta kegiatan terus diperbarui di Spreadsheet, sedangkan laporan kegiatan disusun di Docs.\n\nPrinsip kerja yang paling tepat untuk menjaga kualitas laporan adalah ....",
+        options: {
+          A: "Menyalin data berkali-kali tanpa memperhatikan sumber",
+          B: "Menjadikan data Spreadsheet sebagai sumber data terstruktur dan memastikan bagian yang digunakan dalam Docs tetap konsisten",
+          C: "Menghapus Spreadsheet setelah laporan selesai",
+          D: "Mengetik data secara manual setiap kali ada perubahan",
+          E: "Mengubah seluruh data menjadi screenshot"
+        },
+        correct: "B",
+        explanation: "Prinsip 'Single Source of Truth' menjadikan Spreadsheet sebagai data master terstruktur dan memastikan keterkaitan dokumen Docs selalu konsisten."
+      },
+      {
+        id: 36,
+        category: "spreadsheet",
+        question: "Sebuah Spreadsheet mencatat status pengumpulan tugas:\n| Nama | Status |\n| Ali | Selesai |\n| Budi | Belum |\n| Citra | Selesai |\n| Dinda | Selesai |\n| Eko | Belum |\n\nGuru ingin mengetahui jumlah murid yang belum mengumpulkan tugas.\nRumus yang paling tepat adalah ....",
+        options: {
+          A: "=COUNTIF(B2:B6,\"Selesai\")",
+          B: "=COUNT(B2:B6,\"Belum\")",
+          C: "=IF(B2:B6=\"Belum\")",
+          D: "=COUNTA(B2:B6)",
+          E: "=COUNTIF(B2:B6,\"Belum\")"
+        },
+        correct: "E",
+        explanation: "Kriteria yang ingin dihitung adalah teks 'Belum', sehingga rumusnya =COUNTIF(B2:B6,\"Belum\")."
+      },
+      {
+        id: 37,
+        category: "integrasi",
+        question: "Seorang murid menggabungkan data Spreadsheet ke laporan Docs. Ia menemukan bahwa angka pada dokumen tidak sesuai dengan data terbaru karena perubahan pada Spreadsheet belum diterapkan pada dokumen.\n\nLangkah analisis yang paling tepat sebelum memperbaiki dokumen adalah ....",
+        options: {
+          A: "Memastikan sumber data dan metode integrasi yang digunakan",
+          B: "Menghapus semua data Spreadsheet",
+          C: "Mengganti seluruh font Docs",
+          D: "Mengubah warna tabel",
+          E: "Menghapus daftar isi"
+        },
+        correct: "A",
+        explanation: "Perlu memeriksa apakah tabel disisipkan dengan tautan (linked) sehingga tombol 'Update' muncul, ataukah salin tempel biasa."
+      },
+      {
+        id: 38,
+        category: "spreadsheet",
+        question: "Dalam kegiatan seleksi peserta lomba, guru ingin membuat status otomatis:\nNilai ≥ 85 dan kehadiran ≥ 90% → \"Memenuhi Syarat\"\nSelain itu → \"Belum Memenuhi\"\n\nKonsep yang paling tepat untuk menyelesaikan kebutuhan tersebut adalah ....",
+        options: {
+          A: "COUNTIF dengan satu kriteria",
+          B: "IF dengan logika kondisi yang menggabungkan dua persyaratan",
+          C: "SUM tanpa kriteria",
+          D: "COUNT tanpa kriteria",
+          E: "Table of Contents"
+        },
+        correct: "B",
+        explanation: "Kebutuhan dua syarat simultan (Nilai >= 85 DAN Kehadiran >= 90%) memerlukan fungsi IF yang digabungkan dengan operator logika AND."
+      },
+      {
+        id: 39,
+        category: "docs",
+        question: "Seorang murid membuat laporan \"Program Unggulan As-Syifa\" dan ingin menampilkan daftar isi yang dapat membantu pembaca memahami struktur laporan dari tingkat bab hingga subbab.\n\nStruktur Heading yang paling tepat adalah ....",
+        options: {
+          A: "Semua judul menggunakan Heading 1",
+          B: "Bab menggunakan Heading 2, subbab menggunakan Heading 1",
+          C: "Semua judul menggunakan Normal Text",
+          D: "Bab menggunakan Heading 1, subbab menggunakan Heading 2",
+          E: "Semua judul menggunakan Bold tanpa Heading"
+        },
+        correct: "D",
+        explanation: "Hierarki standar penulisan: Bab Utama menggunakan Heading 1, sedangkan Subbab menggunakan Heading 2."
+      },
+      {
+        id: 40,
+        category: "integrasi",
+        question: "Tim murid As-Syifa membuat proyek akhir berupa laporan evaluasi kegiatan. Mereka mengumpulkan data peserta menggunakan Spreadsheet, menggunakan IF untuk menentukan status, COUNTIF untuk membuat rekap, kemudian menyusun hasil analisis dalam Google Docs.\n\nMengapa alur kerja tersebut menunjukkan pemanfaatan aplikasi secara efektif?",
+        options: {
+          A: "Karena semua pekerjaan dilakukan secara manual",
+          B: "Karena Docs menggantikan semua fungsi Spreadsheet",
+          C: "Karena setiap aplikasi digunakan sesuai fungsi dan data dapat diolah sebelum disajikan menjadi laporan",
+          D: "Karena Spreadsheet hanya digunakan untuk membuat judul laporan",
+          E: "Karena data tidak perlu diperiksa kembali"
+        },
+        correct: "C",
+        explanation: "Alur ini mendemonstrasikan efisiensi komputasi: data mentah dihitung dan diolah otomatis di Spreadsheet, kemudian dirangkum menjadi narasi informatif di Docs."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let studentData = {
+      nama: '',
+      nis: '',
+      kelas: '10 ABU'
+    };
+    let userAnswers = {};      // { 1: 'C', 2: 'A', ... }
+    let userDoubts = {};       // { 1: true, ... }
+    let timerInterval = null;
+    let timeLeftSeconds = 60 * 60; // 60 Menit
+    let violationCount = 0;
+    const MAX_VIOLATIONS = 3;
+    let isExamActive = false;
+    let lastExamResultData = null;
+
+    // Web Audio Beep generator for interactions & warnings
+    function playBeep(type = 'click') {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        if (type === 'click') {
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.05);
+        } else if (type === 'warning') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'success') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(783.99, audioCtx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+        }
+      } catch(e) {
+        // AudioContext restricted before gesture
+      }
+    }
+
+    function requestExamFullscreen() {
+      const el = document.documentElement;
+      if (el.requestFullscreen) {
+        el.requestFullscreen().catch(() => {});
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen();
+      } else if (el.msRequestFullscreen) {
+        el.msRequestFullscreen();
+      }
+      hideFullscreenBanner();
+    }
+
+    function checkFullscreen() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+    }
+
+    function showFullscreenBanner() {
+      if (!isExamActive) return;
+      document.getElementById('fullscreen-banner').classList.remove('hidden');
+    }
+
+    function hideFullscreenBanner() {
+      document.getElementById('fullscreen-banner').classList.add('hidden');
+    }
+
+    // Proctoring listeners: tab blur, visibility change, and fullscreen exit
+    document.addEventListener('fullscreenchange', () => {
+      if (!isExamActive) return;
+      if (!checkFullscreen()) {
+        triggerSecurityViolation('Anda keluar dari mode layar penuh (Full Screen)! Mohon tetap dalam mode layar penuh selama ujian.');
+      } else {
+        hideFullscreenBanner();
+      }
+    });
+
+    window.addEventListener('blur', () => {
+      if (!isExamActive) return;
+      triggerSecurityViolation('Terdeteksi perpindahan jendela atau pergantian tab browser!');
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (!isExamActive) return;
+      if (document.hidden) {
+        triggerSecurityViolation('Terdeteksi membuka aplikasi atau tab lain!');
+      }
+    });
+
+    // Disable right click and devtools shortcut keys
+    document.addEventListener('contextmenu', (e) => {
+      if (isExamActive) e.preventDefault();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!isExamActive) return;
+      // Prevent F12, Ctrl+U, Ctrl+Shift+I, Alt+Tab hints
+      if (e.key === 'F12' || 
+          (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C')) || 
+          (e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I' || e.key === 'j' || e.key === 'J'))) {
+        e.preventDefault();
+      }
+    });
+
+    function triggerSecurityViolation(msg) {
+      if (!isExamActive) return;
+
+      violationCount++;
+      playBeep('warning');
+
+      document.getElementById('violation-count').innerText = violationCount;
+      document.getElementById('violation-badge').classList.remove('hidden');
+
+      // Jika pelanggaran sudah mencapai batas maksimal (3x)
+      if (violationCount >= MAX_VIOLATIONS) {
+        handleMaxViolationsReached();
+        return;
+      }
+
+      document.getElementById('modal-warning-count').innerText = violationCount;
+      document.getElementById('modal-warning-text').innerText = msg;
+      
+      showFullscreenBanner();
+      openModal('modal-warning');
+    }
+
+    function handleMaxViolationsReached() {
+      // Hentikan timer dan nonaktifkan status ujian
+      clearInterval(timerInterval);
+      isExamActive = false;
+
+      // Hapus seluruh jawaban tanpa menyimpan
+      userAnswers = {};
+      userDoubts = {};
+
+      // Tutup modal peringatan biasa jika terbuka
+      closeModal('modal-warning');
+      hideFullscreenBanner();
+
+      // Lepas fullscreen
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      // Bunyikan peringatan keras dan tampilkan modal diskualifikasi
+      playBeep('warning');
+      openModal('modal-disqualified');
+    }
+
+    function confirmDisqualificationLogout() {
+      closeModal('modal-disqualified');
+
+      // Bersihkan dan kembalikan ke halaman login
+      document.getElementById('screen-exam').classList.add('hidden');
+      document.getElementById('screen-result').classList.add('hidden');
+      document.getElementById('screen-welcome').classList.remove('hidden');
+
+      // Tampilkan notifikasi diskualifikasi di halaman login
+      const errBox = document.getElementById('login-error-msg');
+      const errText = document.getElementById('login-error-text');
+      errText.innerHTML = '<strong>Sesi Dibatalkan:</strong> Murid didiskualifikasi karena mencapai 3x pelanggaran keamanan. Seluruh lembar jawaban dibatalkan.';
+      errBox.classList.remove('hidden');
+
+      // Reset total variabel ujian
+      currentQuestionIndex = 0;
+      violationCount = 0;
+      timeLeftSeconds = 60 * 60;
+      studentData = { nama: '', nis: '', kelas: '10 ABU' };
+      document.getElementById('input-nama').value = '';
+      document.getElementById('input-nis').value = '';
+      document.getElementById('violation-badge').classList.add('hidden');
+      document.getElementById('violation-count').innerText = '0';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function dismissWarningAndFullscreen() {
+      closeModal('modal-warning');
+      requestExamFullscreen();
+    }
+
+    function startExam() {
+      const nama = document.getElementById('input-nama').value.trim();
+      const nis = document.getElementById('input-nis').value.trim();
+      const kelas = document.getElementById('input-kelas').value;
+
+      if (!nama || !nis) {
+        const err = document.getElementById('login-error-msg');
+        document.getElementById('login-error-text').innerText = 'Harap lengkapi nama dan NIS/NISN sebelum memulai ujian.';
+        err.classList.remove('hidden');
+        return;
+      }
+      document.getElementById('login-error-msg').classList.add('hidden');
+
+      studentData.nama = nama;
+      studentData.nis = nis;
+      studentData.kelas = kelas;
+
+      // Update header info
+      document.getElementById('header-student-name').innerText = nama;
+      document.getElementById('header-student-class').innerText = `${kelas} • ${nis}`;
+
+      // Reset state pelanggaran & jawaban
+      violationCount = 0;
+      userAnswers = {};
+      userDoubts = {};
+      document.getElementById('violation-count').innerText = '0';
+      document.getElementById('violation-badge').classList.add('hidden');
+
+      // Switch screens
+      document.getElementById('screen-welcome').classList.add('hidden');
+      document.getElementById('screen-exam').classList.remove('hidden');
+
+      isExamActive = true;
+      requestExamFullscreen();
+      buildGridNumbers();
+      loadQuestion(0);
+      startTimer();
+      playBeep('success');
+    }
+
+    function startTimer() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timeLeftSeconds--;
+        if (timeLeftSeconds <= 0) {
+          clearInterval(timerInterval);
+          timeLeftSeconds = 0;
+          updateTimerDisplay();
+          // Auto submit when time is up
+          submitExamNow(true);
+        } else {
+          updateTimerDisplay();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeftSeconds / 60);
+      const seconds = timeLeftSeconds % 60;
+      const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      const timerEl = document.getElementById('timer-display');
+      timerEl.innerText = formatted;
+
+      if (timeLeftSeconds <= 300) { // last 5 minutes
+        timerEl.parentElement.classList.remove('bg-slate-100');
+        timerEl.parentElement.classList.add('bg-rose-100', 'text-rose-700', 'border-rose-300');
+      }
+    }
+
+    function formatQuestionText(text) {
+      // Formats table snippets nicely if present
+      let formatted = text.replace(/\n/g, '<br>');
+      if (text.includes('|')) {
+        // Basic Markdown table to clean styled HTML table
+        const lines = text.split('\n');
+        let tableHtml = '<div class="overflow-x-auto my-3"><table class="min-w-[320px] bg-slate-50 border border-slate-300 text-xs rounded-lg shadow-sm">';
+        let inTable = false;
+        let nonTableParts = [];
+
+        lines.forEach((line) => {
+          if (line.trim().startsWith('|')) {
+            if (!inTable) inTable = true;
+            const cells = line.split('|').map(c => c.trim()).filter(c => c.length > 0);
+            tableHtml += '<tr class="border-b border-slate-200">';
+            cells.forEach(cell => {
+              tableHtml += `<td class="px-3 py-1.5 border-r border-slate-200 font-mono text-slate-700">${cell}</td>`;
+            });
+            tableHtml += '</tr>';
+          } else {
+            if (inTable) {
+              tableHtml += '</table></div>';
+              nonTableParts.push(tableHtml);
+              inTable = false;
+            }
+            if (line.trim().length > 0) {
+              nonTableParts.push(`<div>${line}</div>`);
+            }
+          }
+        });
+        if (inTable) {
+          tableHtml += '</table></div>';
+          nonTableParts.push(tableHtml);
+        }
+        return nonTableParts.join('');
+      }
+      return formatted;
+    }
+
+    function loadQuestion(index) {
+      currentQuestionIndex = index;
+      const q = EXAM_QUESTIONS[index];
+
+      // Update question number & doubt status
+      document.getElementById('current-q-number').innerText = index + 1;
+      document.getElementById('question-content').innerHTML = formatQuestionText(q.question);
+      document.getElementById('btn-doubt').checked = !!userDoubts[q.id];
+
+      // Render Options A - E
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      const selectedOpt = userAnswers[q.id];
+
+      ['A', 'B', 'C', 'D', 'E'].forEach(letter => {
+        const optionText = q.options[letter];
+        if (!optionText) return;
+
+        const isChecked = selectedOpt === letter;
+
+        const optionCard = document.createElement('label');
+        optionCard.className = `flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl border cursor-pointer transition-all ${
+          isChecked 
+            ? 'bg-emerald-50/80 border-emerald-600 ring-2 ring-emerald-500/20 text-emerald-950 font-semibold' 
+            : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-800'
+        }`;
+
+        optionCard.innerHTML = `
+          <input type="radio" name="exam-option" value="${letter}" ${isChecked ? 'checked' : ''} class="sr-only" onchange="selectOption('${letter}')">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 transition ${
+            isChecked ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-100 text-slate-700 border border-slate-300'
+          }">
+            ${letter}
+          </div>
+          <div class="text-sm sm:text-base leading-snug flex-1 font-normal font-sans">
+            ${optionText}
+          </div>
+        `;
+        container.appendChild(optionCard);
+      });
+
+      // Update prev/next button states
+      document.getElementById('btn-prev').disabled = (index === 0);
+      const nextBtn = document.getElementById('btn-next');
+      if (index === EXAM_QUESTIONS.length - 1) {
+        nextBtn.innerHTML = `<span>Selesai</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`;
+      } else {
+        nextBtn.innerHTML = `<span>Berikutnya</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>`;
+      }
+
+      updateIndicators();
+    }
+
+    function selectOption(letter) {
+      playBeep('click');
+      const q = EXAM_QUESTIONS[currentQuestionIndex];
+      userAnswers[q.id] = letter;
+      loadQuestion(currentQuestionIndex);
+      updateIndicators();
+    }
+
+    function toggleDoubt() {
+      playBeep('click');
+      const q = EXAM_QUESTIONS[currentQuestionIndex];
+      const isChecked = document.getElementById('btn-doubt').checked;
+      if (isChecked) {
+        userDoubts[q.id] = true;
+      } else {
+        delete userDoubts[q.id];
+      }
+      updateIndicators();
+    }
+
+    function navigateQuestion(delta) {
+      playBeep('click');
+      const newIndex = currentQuestionIndex + delta;
+      if (newIndex >= 0 && newIndex < EXAM_QUESTIONS.length) {
+        loadQuestion(newIndex);
+      } else if (newIndex >= EXAM_QUESTIONS.length) {
+        confirmFinishExam();
+      }
+    }
+
+    function buildGridNumbers() {
+      const grid = document.getElementById('grid-numbers');
+      grid.innerHTML = '';
+      EXAM_QUESTIONS.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `grid-btn-${idx}`;
+        btn.onclick = () => {
+          playBeep('click');
+          loadQuestion(idx);
+        };
+        btn.className = "w-full aspect-square rounded-xl text-xs font-bold flex items-center justify-center transition border relative";
+        btn.innerText = idx + 1;
+        grid.appendChild(btn);
+      });
+      updateIndicators();
+    }
+
+    function updateIndicators() {
+      let answeredCount = 0;
+      let doubtCount = 0;
+
+      EXAM_QUESTIONS.forEach((q, idx) => {
+        const btn = document.getElementById(`grid-btn-${idx}`);
+        if (!btn) return;
+
+        const isAnswered = !!userAnswers[q.id];
+        const isDoubt = !!userDoubts[q.id];
+        const isCurrent = idx === currentQuestionIndex;
+
+        if (isAnswered) answeredCount++;
+        if (isDoubt) doubtCount++;
+
+        // Reset classes
+        btn.className = "w-full aspect-square rounded-xl text-xs font-bold flex items-center justify-center transition border relative";
+
+        if (isCurrent) {
+          btn.classList.add('ring-2', 'ring-slate-900', 'ring-offset-1');
+        }
+
+        if (isDoubt) {
+          btn.classList.add('bg-amber-400', 'text-amber-950', 'border-amber-500');
+        } else if (isAnswered) {
+          btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-700');
+        } else {
+          btn.classList.add('bg-slate-100', 'text-slate-700', 'border-slate-200', 'hover:bg-slate-200');
+        }
+      });
+
+      const total = EXAM_QUESTIONS.length;
+      const unanswered = total - answeredCount;
+
+      document.getElementById('legend-answered').innerText = answeredCount;
+      document.getElementById('legend-doubt').innerText = doubtCount;
+      document.getElementById('legend-unanswered').innerText = unanswered;
+      document.getElementById('answered-count-bottom').innerText = answeredCount;
+
+      // Progress bar percentage
+      const pct = (answeredCount / total) * 100;
+      document.getElementById('exam-progress-bar').style.width = `${pct}%`;
+    }
+
+    function confirmFinishExam() {
+      playBeep('click');
+      let answeredCount = Object.keys(userAnswers).length;
+      let doubtCount = Object.keys(userDoubts).length;
+      let unansweredCount = EXAM_QUESTIONS.length - answeredCount;
+
+      document.getElementById('modal-stat-answered').innerText = `${answeredCount} Soal`;
+      document.getElementById('modal-stat-unanswered').innerText = `${unansweredCount} Soal`;
+      document.getElementById('modal-stat-doubt').innerText = `${doubtCount} Soal`;
+
+      openModal('modal-confirm');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function submitExamNow(isTimeOut = false) {
+      closeModal('modal-confirm');
+      clearInterval(timerInterval);
+      isExamActive = false;
+
+      // Exit fullscreen safely
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+
+      hideFullscreenBanner();
+
+      // Calculate Scores
+      let correct = 0;
+      let wrong = 0;
+      let empty = 0;
+
+      let catScores = {
+        spreadsheet: { total: 0, correct: 0 },
+        docs: { total: 0, correct: 0 },
+        integrasi: { total: 0, correct: 0 }
+      };
+
+      EXAM_QUESTIONS.forEach(q => {
+        const cat = q.category || 'spreadsheet';
+        if (catScores[cat]) catScores[cat].total++;
+
+        const ans = userAnswers[q.id];
+        if (!ans) {
+          empty++;
+        } else if (ans === q.correct) {
+          correct++;
+          if (catScores[cat]) catScores[cat].correct++;
+        } else {
+          wrong++;
+        }
+      });
+
+      // Score scale 0 - 100
+      const scoreTotal = Math.round((correct / EXAM_QUESTIONS.length) * 100);
+
+      // Determine predicate
+      let predicate = "Perlu Bimbingan";
+      if (scoreTotal >= 85) {
+        predicate = "Sangat Baik (A)";
+      } else if (scoreTotal >= 75) {
+        predicate = "Baik (B)";
+      } else if (scoreTotal >= 65) {
+        predicate = "Cukup (C)";
+      }
+
+      // Populate Result Screen
+      document.getElementById('res-student-name').innerText = studentData.nama;
+      document.getElementById('res-student-nis').innerText = studentData.nis;
+      document.getElementById('res-student-class').innerText = studentData.kelas;
+      
+      const now = new Date();
+      document.getElementById('res-finish-time').innerText = now.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      document.getElementById('res-final-score').innerText = scoreTotal;
+      document.getElementById('res-grade-predicate').innerText = `Predikat: ${predicate}`;
+      document.getElementById('res-total-correct').innerText = correct;
+      document.getElementById('res-total-wrong').innerText = wrong;
+      document.getElementById('res-total-empty').innerText = empty;
+
+      // Category breakdowns
+      const calcPct = (c) => catScores[c].total > 0 ? Math.round((catScores[c].correct / catScores[c].total) * 100) : 0;
+      
+      const spPct = calcPct('spreadsheet');
+      document.getElementById('cat-spreadsheet-pct').innerText = `${spPct}% (${catScores.spreadsheet.correct}/${catScores.spreadsheet.total})`;
+      document.getElementById('cat-spreadsheet-bar').style.width = `${spPct}%`;
+
+      const docsPct = calcPct('docs');
+      document.getElementById('cat-docs-pct').innerText = `${docsPct}% (${catScores.docs.correct}/${catScores.docs.total})`;
+      document.getElementById('cat-docs-bar').style.width = `${docsPct}%`;
+
+      const intPct = calcPct('integrasi');
+      document.getElementById('cat-integrasi-pct').innerText = `${intPct}% (${catScores.integrasi.correct}/${catScores.integrasi.total})`;
+      document.getElementById('cat-integrasi-bar').style.width = `${intPct}%`;
+
+      lastExamResultData = {
+        timestamp: new Date().toLocaleString('id-ID'),
+        nama: studentData.nama,
+        nis: studentData.nis,
+        kelas: studentData.kelas,
+        skor: scoreTotal,
+        predikat: predicate,
+        benar: correct,
+        salah: wrong,
+        kosong: empty,
+        topikSpreadsheet: `${spPct}%`,
+        topikDocs: `${docsPct}%`,
+        topikIntegrasi: `${intPct}%`,
+        pelanggaran: violationCount
+      };
+
+      // Show Result screen
+      document.getElementById('screen-exam').classList.add('hidden');
+      document.getElementById('screen-result').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      playBeep('success');
+    }
+
+    function downloadResultCSV() {
+      if (!lastExamResultData) return;
+
+      const headers = [
+        "Waktu Selesai", "Nama Murid", "NIS/NISN", "Kelas", 
+        "Skor Nilai", "Predikat", "Benar", "Salah", "Kosong", 
+        "Fungsi Spreadsheet", "Google Docs", "Integrasi Data", "Pelanggaran"
+      ];
+
+      const row = [
+        `"${lastExamResultData.timestamp}"`,
+        `"${lastExamResultData.nama}"`,
+        `"${lastExamResultData.nis}"`,
+        `"${lastExamResultData.kelas}"`,
+        lastExamResultData.skor,
+        `"${lastExamResultData.predikat}"`,
+        lastExamResultData.benar,
+        lastExamResultData.salah,
+        lastExamResultData.kosong,
+        `"${lastExamResultData.topikSpreadsheet}"`,
+        `"${lastExamResultData.topikDocs}"`,
+        `"${lastExamResultData.topikIntegrasi}"`,
+        lastExamResultData.pelanggaran
+      ];
+
+      // Add UTF-8 BOM so Excel and Google Sheets parse characters correctly
+      const csvContent = "\uFEFF" + headers.join(",") + "\n" + row.join(",") + "\n";
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const safeName = lastExamResultData.nama.replace(/\s+/g, '_');
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Hasil_PTS_TIK_${safeName}_${lastExamResultData.kelas}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      playBeep('success');
+    }
+
+    function renderReviewList() {
+      const reviewContainer = document.getElementById('review-list');
+      reviewContainer.innerHTML = '';
+
+      EXAM_QUESTIONS.forEach((q, idx) => {
+        const userAns = userAnswers[q.id];
+        const isCorrect = userAns === q.correct;
+        const isSkipped = !userAns;
+
+        let statusBadge = '';
+        let cardBorder = '';
+        if (isCorrect) {
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Benar (+2.5)
+          </span>`;
+          cardBorder = 'border-emerald-200 bg-emerald-50/20';
+        } else if (isSkipped) {
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700">Tidak Dijawab</span>`;
+          cardBorder = 'border-slate-200 bg-white';
+        } else {
+          statusBadge = `<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            Salah
+          </span>`;
+          cardBorder = 'border-rose-200 bg-rose-50/20';
+        }
+
+        const reviewCard = document.createElement('div');
+        reviewCard.className = `p-4 sm:p-5 rounded-2xl border ${cardBorder} space-y-3 transition`;
+
+        reviewCard.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold uppercase tracking-wide text-slate-500">Nomor ${idx + 1}</span>
+            ${statusBadge}
+          </div>
+          <div class="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+            ${formatQuestionText(q.question)}
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-2">
+            <div class="p-2.5 rounded-xl ${isCorrect ? 'bg-emerald-100 text-emerald-950 font-bold' : 'bg-slate-100 text-slate-700'}">
+              Jawaban Anda: <strong class="uppercase">${userAns ? `${userAns}. ${q.options[userAns]}` : 'Kosong'}</strong>
+            </div>
+            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-bold">
+              Kunci Jawaban: <span class="uppercase">${q.correct}. ${q.options[q.correct]}</span>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-100/80 rounded-xl text-xs text-slate-600 leading-relaxed border border-slate-200/60">
+            <strong class="text-slate-800">Pembahasan:</strong> ${q.explanation}
+          </div>
+        `;
+        reviewContainer.appendChild(reviewCard);
+      });
+    }
+
+    function restartExam() {
+      // Reset variables
+      currentQuestionIndex = 0;
+      userAnswers = {};
+      userDoubts = {};
+      violationCount = 0;
+      timeLeftSeconds = 60 * 60;
+
+      document.getElementById('screen-result').classList.add('hidden');
+      document.getElementById('screen-welcome').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
